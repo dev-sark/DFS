@@ -1,0 +1,13 @@
+package com.divinefavor.hms.model;
+
+public enum VisitStatus {
+    WAITING_FOR_VITALS,
+    WAITING_FOR_CONSULTATION,
+    CONSULTING,
+    WAITING_FOR_LAB,
+    LAB_COMPLETED,
+    WAITING_FOR_PHARMACY,
+    DISPENSED,
+    WAITING_FOR_PAYMENT,
+    COMPLETED
+}

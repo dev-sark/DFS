@@ -1,0 +1,7 @@
+package com.divinefavor.hms.repository;
+
+import com.divinefavor.hms.model.AuditLog;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface AuditLogRepository extends JpaRepository<AuditLog, Long> {
+}
