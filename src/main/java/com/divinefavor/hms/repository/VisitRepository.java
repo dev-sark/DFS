@@ -1,12 +1,11 @@
 package com.divinefavor.hms.repository;
 
 import com.divinefavor.hms.model.Visit;
-import com.divinefavor.hms.model.VisitStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface VisitRepository extends JpaRepository<Visit, Long> {
-    List<Visit> findByStatus(VisitStatus status);
-
-    List<Visit> findAllByOrderByVisitDateDesc();
+    List<Visit> findByPatientId(Long patientId);
+    List<Visit> findByStatus(String status);
+    long countByNurseId(Long nurseId);
 }

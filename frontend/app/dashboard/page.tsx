@@ -16,32 +16,8 @@ export default function DashboardRedirector() {
             return
         }
 
-        // Dynamic Redirection based on Role
-        switch (user.role) {
-            case 'ADMIN':
-                router.push('/dashboard/analytics')
-                break
-            case 'DOCTOR':
-                router.push('/dashboard/consultation')
-                break
-            case 'NURSE':
-                router.push('/dashboard/queue') // Nurses handle vitals/queue
-                break
-            case 'RECEPTIONIST':
-                router.push('/dashboard/registration')
-                break
-            case 'CASHIER':
-                router.push('/dashboard/billing')
-                break
-            case 'LAB_TECH':
-                router.push('/dashboard/lab')
-                break
-            case 'PHARMACIST':
-                router.push('/dashboard/pharmacy')
-                break
-            default:
-                router.push('/login')
-        }
+        // Redirect everyone to the Overview first so they see the stats
+        router.push('/dashboard/overview')
     }, [user, isLoading, router])
 
     return (

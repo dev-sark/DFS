@@ -1,9 +1,11 @@
 package com.divinefavor.hms.model;
 
 import jakarta.persistence.*;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty.Access;
 
 @Entity
-@Table(name = "users")
+@Table(name = "\"Staffusers\"")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -13,22 +15,23 @@ public class User {
     private String username;
 
     @Column(nullable = false)
+    @JsonProperty(access = Access.WRITE_ONLY)
     private String password;
 
-    @Column(unique = true, nullable = false)
-    private String email;
+    @Column(name = "role")
+    private String role;
 
-    @Enumerated(EnumType.STRING)
-    private Role role;
+    @Column(name = "approval")
+    private boolean approval;
 
     public User() {
     }
 
-    public User(String username, String password, String email, Role role) {
+    public User(String username, String password, String role) {
         this.username = username;
         this.password = password;
-        this.email = email;
         this.role = role;
+        this.approval = false;
     }
 
     public Long getId() {
@@ -55,19 +58,19 @@ public class User {
         this.password = password;
     }
 
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public Role getRole() {
+    public String getRole() {
         return role;
     }
 
-    public void setRole(Role role) {
+    public void setRole(String role) {
         this.role = role;
+    }
+
+    public boolean isApproval() {
+        return approval;
+    }
+
+    public void setApproval(boolean approval) {
+        this.approval = approval;
     }
 }

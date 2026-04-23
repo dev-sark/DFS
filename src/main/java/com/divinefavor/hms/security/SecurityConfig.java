@@ -67,13 +67,23 @@ public class SecurityConfig {
         http.cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(auth -> auth.requestMatchers("/api/auth/**").permitAll()
-                        .requestMatchers("/api/admin/**").hasRole("ADMIN")
-                        .requestMatchers("/api/receptionist/**").hasAnyRole("ADMIN", "RECEPTIONIST")
-                        .requestMatchers("/api/medical/**").hasAnyRole("DOCTOR", "NURSE")
-                        .requestMatchers("/api/lab/**").hasAnyRole("ADMIN", "LAB_TECH")
-                        .requestMatchers("/api/pharmacy/**").hasAnyRole("ADMIN", "PHARMACIST")
-                        .requestMatchers("/api/cashier/**").hasAnyRole("ADMIN", "CASHIER")
+                .authorizeHttpRequests(auth -> auth
+                        // Public Auth Endpoints
+                        .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers("/error").permitAll()
+
+                        // Core endpoints
+                        .requestMatchers("/api/users", "/api/users/**").hasAuthority("ROLE_ADMIN")
+                        .requestMatchers("/api/patients", "/api/patients/**")
+                        .hasAnyAuthority("ROLE_ADMIN", "ROLE_RECEPTIONIST", "ROLE_NURSE", "ROLE_DOCTOR")
+                        .requestMatchers("/api/visits", "/api/visits/**")
+                        .hasAnyAuthority("ROLE_ADMIN", "ROLE_NURSE", "ROLE_DOCTOR", "ROLE_RECEPTIONIST")
+                        .requestMatchers("/api/medical-records", "/api/medical-records/**")
+                        .hasAnyAuthority("ROLE_ADMIN", "ROLE_DOCTOR")
+                        .requestMatchers("/api/analytics", "/api/analytics/**")
+                        .hasAnyAuthority("ROLE_ADMIN", "ROLE_RECEPTIONIST", "ROLE_NURSE", "ROLE_DOCTOR")
+
+                        // All other requests require a valid token
                         .anyRequest().authenticated());
 
         http.authenticationProvider(authenticationProvider());

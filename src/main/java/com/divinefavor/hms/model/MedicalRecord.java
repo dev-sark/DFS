@@ -1,7 +1,7 @@
 package com.divinefavor.hms.model;
 
 import jakarta.persistence.*;
-import java.time.LocalDateTime;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name = "medical_records")
@@ -10,11 +10,15 @@ public class MedicalRecord {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "patient_id", nullable = false)
-    private Patient patient;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "visitid", unique = true, nullable = false)
+    @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
+    private Visit visit;
 
-    private LocalDateTime visitDate;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "doctor_id")
+    @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
+    private User doctor;
 
     @Column(columnDefinition = "TEXT")
     private String symptoms;
@@ -22,24 +26,13 @@ public class MedicalRecord {
     @Column(columnDefinition = "TEXT")
     private String diagnosis;
 
-    @Column(columnDefinition = "TEXT")
-    private String treatment;
+    @Column(name = "treatment_plan", columnDefinition = "TEXT")
+    private String treatmentPlan;
 
     @Column(columnDefinition = "TEXT")
-    private String notes;
-
-    private String priority; // e.g., NORMAL, CRITICAL, RECURRING
-
-    private boolean doctorNotified;
+    private String prescription;
 
     public MedicalRecord() {
-    }
-
-    @PrePersist
-    protected void onCreate() {
-        if (visitDate == null) {
-            visitDate = LocalDateTime.now();
-        }
     }
 
     public Long getId() {
@@ -50,20 +43,20 @@ public class MedicalRecord {
         this.id = id;
     }
 
-    public Patient getPatient() {
-        return patient;
+    public Visit getVisit() {
+        return visit;
     }
 
-    public void setPatient(Patient patient) {
-        this.patient = patient;
+    public void setVisit(Visit visit) {
+        this.visit = visit;
     }
 
-    public LocalDateTime getVisitDate() {
-        return visitDate;
+    public User getDoctor() {
+        return doctor;
     }
 
-    public void setVisitDate(LocalDateTime visitDate) {
-        this.visitDate = visitDate;
+    public void setDoctor(User doctor) {
+        this.doctor = doctor;
     }
 
     public String getSymptoms() {
@@ -82,35 +75,19 @@ public class MedicalRecord {
         this.diagnosis = diagnosis;
     }
 
-    public String getTreatment() {
-        return treatment;
+    public String getTreatmentPlan() {
+        return treatmentPlan;
     }
 
-    public void setTreatment(String treatment) {
-        this.treatment = treatment;
+    public void setTreatmentPlan(String treatmentPlan) {
+        this.treatmentPlan = treatmentPlan;
     }
 
-    public String getNotes() {
-        return notes;
+    public String getPrescription() {
+        return prescription;
     }
 
-    public void setNotes(String notes) {
-        this.notes = notes;
-    }
-
-    public String getPriority() {
-        return priority;
-    }
-
-    public void setPriority(String priority) {
-        this.priority = priority;
-    }
-
-    public boolean isDoctorNotified() {
-        return doctorNotified;
-    }
-
-    public void setDoctorNotified(boolean doctorNotified) {
-        this.doctorNotified = doctorNotified;
+    public void setPrescription(String prescription) {
+        this.prescription = prescription;
     }
 }

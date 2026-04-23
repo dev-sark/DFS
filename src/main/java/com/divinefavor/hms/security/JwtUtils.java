@@ -2,7 +2,6 @@ package com.divinefavor.hms.security;
 
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
@@ -13,10 +12,11 @@ import java.util.Date;
 @Component
 public class JwtUtils {
 
-    // Using a hardcoded key for now as requested for the foundation, 
-    // but should be moved to env variables in production.
-    private final String jwtSecret = "divinefavorhospitalmanagementbackendsecuritykey2024";
-    private final int jwtExpirationMs = 86400000; // 24 hours
+    @org.springframework.beans.factory.annotation.Value("${app.jwt.secret}")
+    private String jwtSecret;
+
+    @org.springframework.beans.factory.annotation.Value("${app.jwt.expiration}")
+    private int jwtExpirationMs;
 
     private Key key() {
         return Keys.hmacShaKeyFor(jwtSecret.getBytes());

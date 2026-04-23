@@ -2,8 +2,6 @@ package com.divinefavor.hms.model;
 
 import jakarta.persistence.*;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Table(name = "patients")
@@ -12,51 +10,29 @@ public class Patient {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true, nullable = false)
-    private String folderNumber; // Unique Hospital ID
-
-    // Bio-Data
-    @Column(nullable = false)
+    @Column(name = "full_name", nullable = false)
     private String fullName;
-    private LocalDate dateOfBirth;
-    private String gender;
-    private String bloodGroup;
-    private String genotype;
 
-    // Contact
+    @Column(name = "folder_number", unique = true, nullable = false)
+    private String folderNumber;
+
     private String telephone;
-    private String email;
 
-    // Address
-    private String houseNumber;
-    private String streetName;
-    private String landmark;
-    private String city;
+    @Column(name = "gender")
+    private String gender;
 
-    // Socio-Economic
-    private String occupation;
-    private String workplace;
-    private String emergencyContactName;
-    private String emergencyContactPhone;
+    @Column(name = "date_of_birth")
+    @com.fasterxml.jackson.annotation.JsonFormat(pattern = "yyyy-MM-dd")
+    private LocalDate dateOfBirth;
 
-    // Insurance
-    private boolean hasInsurance;
-    private String insuranceType; // e.g., NHIS, Private
+    @Column(name = "has_insurance")
+    private Boolean hasInsurance;
+
+    @Column(name = "insurance_provider")
     private String insuranceProvider;
+
+    @Column(name = "insurance_number")
     private String insuranceNumber;
-
-    @ElementCollection
-    @CollectionTable(name = "patient_allergies", joinColumns = @JoinColumn(name = "patient_id"))
-    @Column(name = "allergy")
-    private List<String> allergies = new ArrayList<>();
-
-    @ElementCollection
-    @CollectionTable(name = "patient_chronic_conditions", joinColumns = @JoinColumn(name = "patient_id"))
-    @Column(name = "condition")
-    private List<String> chronicConditions = new ArrayList<>();
-
-    @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<MedicalRecord> medicalRecords = new ArrayList<>();
 
     public Patient() {
     }
@@ -69,14 +45,6 @@ public class Patient {
         this.id = id;
     }
 
-    public String getFolderNumber() {
-        return folderNumber;
-    }
-
-    public void setFolderNumber(String folderNumber) {
-        this.folderNumber = folderNumber;
-    }
-
     public String getFullName() {
         return fullName;
     }
@@ -85,36 +53,12 @@ public class Patient {
         this.fullName = fullName;
     }
 
-    public LocalDate getDateOfBirth() {
-        return dateOfBirth;
+    public String getFolderNumber() {
+        return folderNumber;
     }
 
-    public void setDateOfBirth(LocalDate dateOfBirth) {
-        this.dateOfBirth = dateOfBirth;
-    }
-
-    public String getGender() {
-        return gender;
-    }
-
-    public void setGender(String gender) {
-        this.gender = gender;
-    }
-
-    public String getBloodGroup() {
-        return bloodGroup;
-    }
-
-    public void setBloodGroup(String bloodGroup) {
-        this.bloodGroup = bloodGroup;
-    }
-
-    public String getGenotype() {
-        return genotype;
-    }
-
-    public void setGenotype(String genotype) {
-        this.genotype = genotype;
+    public void setFolderNumber(String folderNumber) {
+        this.folderNumber = folderNumber;
     }
 
     public String getTelephone() {
@@ -125,76 +69,28 @@ public class Patient {
         this.telephone = telephone;
     }
 
-    public String getEmail() {
-        return email;
+    public String getGender() {
+        return gender;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setGender(String gender) {
+        this.gender = gender;
     }
 
-    public String getHouseNumber() {
-        return houseNumber;
+    public LocalDate getDateOfBirth() {
+        return dateOfBirth;
     }
 
-    public void setHouseNumber(String houseNumber) {
-        this.houseNumber = houseNumber;
+    public void setDateOfBirth(LocalDate dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
     }
 
-    public String getStreetName() {
-        return streetName;
+    public Boolean getHasInsurance() {
+        return hasInsurance;
     }
 
-    public void setStreetName(String streetName) {
-        this.streetName = streetName;
-    }
-
-    public String getLandmark() {
-        return landmark;
-    }
-
-    public void setLandmark(String landmark) {
-        this.landmark = landmark;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public String getOccupation() {
-        return occupation;
-    }
-
-    public void setOccupation(String occupation) {
-        this.occupation = occupation;
-    }
-
-    public String getWorkplace() {
-        return workplace;
-    }
-
-    public void setWorkplace(String workplace) {
-        this.workplace = workplace;
-    }
-
-    public String getEmergencyContactName() {
-        return emergencyContactName;
-    }
-
-    public void setEmergencyContactName(String emergencyContactName) {
-        this.emergencyContactName = emergencyContactName;
-    }
-
-    public String getEmergencyContactPhone() {
-        return emergencyContactPhone;
-    }
-
-    public void setEmergencyContactPhone(String emergencyContactPhone) {
-        this.emergencyContactPhone = emergencyContactPhone;
+    public void setHasInsurance(Boolean hasInsurance) {
+        this.hasInsurance = hasInsurance;
     }
 
     public String getInsuranceProvider() {
@@ -211,45 +107,5 @@ public class Patient {
 
     public void setInsuranceNumber(String insuranceNumber) {
         this.insuranceNumber = insuranceNumber;
-    }
-
-    public boolean isHasInsurance() {
-        return hasInsurance;
-    }
-
-    public void setHasInsurance(boolean hasInsurance) {
-        this.hasInsurance = hasInsurance;
-    }
-
-    public String getInsuranceType() {
-        return insuranceType;
-    }
-
-    public void setInsuranceType(String insuranceType) {
-        this.insuranceType = insuranceType;
-    }
-
-    public List<String> getAllergies() {
-        return allergies;
-    }
-
-    public void setAllergies(List<String> allergies) {
-        this.allergies = allergies;
-    }
-
-    public List<String> getChronicConditions() {
-        return chronicConditions;
-    }
-
-    public void setChronicConditions(List<String> chronicConditions) {
-        this.chronicConditions = chronicConditions;
-    }
-
-    public List<MedicalRecord> getMedicalRecords() {
-        return medicalRecords;
-    }
-
-    public void setMedicalRecords(List<MedicalRecord> medicalRecords) {
-        this.medicalRecords = medicalRecords;
     }
 }

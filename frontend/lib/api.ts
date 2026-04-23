@@ -27,59 +27,55 @@ export const authApi = {
         method: 'POST',
         body: JSON.stringify(credentials),
     }),
-};
-
-export const receptionistApi = {
-    registerPatient: (patient: any) => apiRequest('/receptionist/register', {
+    register: (credentials: any) => apiRequest('/auth/register', {
         method: 'POST',
-        body: JSON.stringify(patient),
+        body: JSON.stringify(credentials),
     }),
-    getTodaysVisits: () => apiRequest('/receptionist/todays-visits'),
-    checkIn: (folderNumber: string) => apiRequest(`/receptionist/check-in/${folderNumber}`, {
-        method: 'POST',
-    }),
-};
-
-export const triageApi = {
-    getWaitingPatients: () => apiRequest('/triage/queue'),
-    saveVitals: (vitals: any) => apiRequest('/triage/capture-vitals', {
-        method: 'POST',
-        body: JSON.stringify(vitals),
-    }),
-};
-
-export const doctorApi = {
-    getQueue: () => apiRequest('/doctor/queue'),
-    submitConsultation: (data: any) => apiRequest('/doctor/submit', {
-        method: 'POST',
+    changePassword: (data: any) => apiRequest('/auth/change-password', {
+        method: 'PUT',
         body: JSON.stringify(data),
     }),
 };
 
-export const analyticsApi = {
-    getVisitVolume: () => apiRequest('/analytics/visit-volume'),
-    getDiseaseStats: () => apiRequest('/analytics/disease-prevalence'),
-    getFrequentVisitors: (threshold = 1) => apiRequest(`/analytics/frequent-visitors?threshold=${threshold}`),
+export const usersApi = {
+    getAllUsers: () => apiRequest('/users'),
+    createStaff: (userData: any) => apiRequest('/auth/register', {
+        method: 'POST',
+        body: JSON.stringify(userData),
+    }),
+    approveUser: (id: number) => apiRequest(`/users/${id}/approve`, { method: 'PUT' }),
+    deleteUser: (id: number) => apiRequest(`/users/${id}`, { method: 'DELETE' }),
 };
 
-export const pharmacyApi = {
-    getPendingPrescriptions: () => apiRequest('/pharmacy/pending'),
-    dispenseMedication: (id: number) => apiRequest(`/pharmacy/dispense/${id}`, { method: 'POST' }),
-};
-
-export const labApi = {
-    getPendingRequests: () => apiRequest('/lab/pending'),
-    submitResult: (id: number, results: string, techName: string) => apiRequest(`/lab/submit-result/${id}?results=${encodeURIComponent(results)}&techName=${encodeURIComponent(techName)}`, { method: 'POST' }),
-};
-
-export const cashierApi = {
-    getInvoices: () => apiRequest('/cashier/invoices'),
-    payInvoice: (id: number, paymentMethod: string) => apiRequest(`/cashier/pay/${id}`, {
+export const patientsApi = {
+    getAllPatients: () => apiRequest('/patients'),
+    registerPatient: (patient: any) => apiRequest('/patients/register', {
+        method: 'POST',
+        body: JSON.stringify(patient),
+    }),
+    updatePatient: (id: number, patientUpdates: any) => apiRequest(`/patients/${id}`, {
         method: 'PUT',
-        body: JSON.stringify({ paymentMethod }),
+        body: JSON.stringify(patientUpdates),
     }),
 };
 
-export const historyApi = {
-    getRecords: () => apiRequest('/history/records'),
+export const visitsApi = {
+    getVisitHistory: (patientId: number) => apiRequest(`/visits/patient/${patientId}`),
+    saveVitals: (patientId: number, visitDetails: any) => apiRequest(`/visits/patient/${patientId}`, {
+        method: 'POST',
+        body: JSON.stringify(visitDetails),
+    }),
+    getQueuedVisits: (status: string) => apiRequest(`/visits/status/${status}`),
+};
+
+export const recordsApi = {
+    saveConsultationNotes: (payload: any) => apiRequest('/medical-records', {
+        method: 'POST',
+        body: JSON.stringify(payload),
+    }),
+};
+
+export const analyticsApi = {
+    getSummary: () => apiRequest('/analytics/summary'),
+    getStaffPerformance: () => apiRequest('/analytics/staff-performance'),
 };

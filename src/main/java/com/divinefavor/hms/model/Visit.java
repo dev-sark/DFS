@@ -2,6 +2,7 @@ package com.divinefavor.hms.model;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name = "visits")
@@ -12,25 +13,34 @@ public class Visit {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "patient_id", nullable = false)
+    @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
     private Patient patient;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "nurse_id")
+    @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
+    private User nurse;
+
+    @Column(name = "visit_date")
     private LocalDateTime visitDate;
 
-    @Enumerated(EnumType.STRING)
-    private VisitStatus status;
+    @Column(name = "temperature")
+    private String temperature;
 
-    // Vitals (Triage)
-    private Double temperature;
+    @Column(name = "blood_pressure")
     private String bloodPressure;
-    private Integer heartRate;
+
+    @Column(name = "weight")
     private Double weight;
 
-    // Prioritization
-    private boolean urgent;
-    private String triageNotes;
+    @Column(name = "status")
+    private String status;
 
-    // Analytics Helper (Phase 3 Prep)
-    private String primaryDiagnosis;
+    @Column(name = "priority")
+    private String priority; // NORMAL, EMERGENCY, CRITICAL
+
+    @Column(name = "urgency_reason")
+    private String urgencyReason;
 
     public Visit() {
     }
@@ -42,7 +52,6 @@ public class Visit {
         }
     }
 
-    // Getters and Setters
     public Long getId() {
         return id;
     }
@@ -67,19 +76,11 @@ public class Visit {
         this.visitDate = visitDate;
     }
 
-    public VisitStatus getStatus() {
-        return status;
-    }
-
-    public void setStatus(VisitStatus status) {
-        this.status = status;
-    }
-
-    public Double getTemperature() {
+    public String getTemperature() {
         return temperature;
     }
 
-    public void setTemperature(Double temperature) {
+    public void setTemperature(String temperature) {
         this.temperature = temperature;
     }
 
@@ -91,14 +92,6 @@ public class Visit {
         this.bloodPressure = bloodPressure;
     }
 
-    public Integer getHeartRate() {
-        return heartRate;
-    }
-
-    public void setHeartRate(Integer heartRate) {
-        this.heartRate = heartRate;
-    }
-
     public Double getWeight() {
         return weight;
     }
@@ -107,27 +100,35 @@ public class Visit {
         this.weight = weight;
     }
 
-    public boolean isUrgent() {
-        return urgent;
+    public String getStatus() {
+        return status;
     }
 
-    public void setUrgent(boolean urgent) {
-        this.urgent = urgent;
+    public void setStatus(String status) {
+        this.status = status;
     }
 
-    public String getTriageNotes() {
-        return triageNotes;
+    public String getPriority() {
+        return priority;
     }
 
-    public void setTriageNotes(String triageNotes) {
-        this.triageNotes = triageNotes;
+    public void setPriority(String priority) {
+        this.priority = priority;
     }
 
-    public String getPrimaryDiagnosis() {
-        return primaryDiagnosis;
+    public String getUrgencyReason() {
+        return urgencyReason;
     }
 
-    public void setPrimaryDiagnosis(String primaryDiagnosis) {
-        this.primaryDiagnosis = primaryDiagnosis;
+    public void setUrgencyReason(String urgencyReason) {
+        this.urgencyReason = urgencyReason;
+    }
+
+    public User getNurse() {
+        return nurse;
+    }
+
+    public void setNurse(User nurse) {
+        this.nurse = nurse;
     }
 }

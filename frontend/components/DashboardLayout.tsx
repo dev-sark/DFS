@@ -30,66 +30,57 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
 
                     <nav className="flex-1 space-y-2">
                         {/* Common Items */}
-                        <NavItem href="/dashboard" label="Home" active={pathname === '/dashboard'} />
+                        <NavItem href="/dashboard/overview" label="Overview" active={pathname === '/dashboard/overview'} />
 
-                        {/* Role Specific Items */}
-                        {role === 'RECEPTIONIST' && (
-                            <>
-                                <NavItem href="/dashboard/registration" label="Registration" active={pathname === '/dashboard/registration'} />
-                                <NavItem href="/dashboard/queue" label="Patient Queue" active={pathname === '/dashboard/queue'} />
-                            </>
+                        {/* Core Staff Workflows */}
+                        {(role === 'ADMIN' || role === 'RECEPTIONIST' || role === 'NURSE') && (
+                            <NavItem href="/dashboard/registration" label="Registration Flow" active={pathname === '/dashboard/registration'} />
                         )}
 
-                        {role === 'NURSE' && (
-                            <NavItem href="/dashboard/queue" label="Triage Queue" active={pathname === '/dashboard/queue'} />
+                        <NavItem href="/dashboard/history" label="All Patients" active={pathname === '/dashboard/history'} />
+
+                        {(role === 'ADMIN' || role === 'NURSE') && (
+                            <NavItem href="/dashboard/queue" label="Visits & Triage" active={pathname === '/dashboard/queue'} />
                         )}
 
-                        {role === 'DOCTOR' && (
-                            <>
-                                <NavItem href="/dashboard/consultation" label="Consultation" active={pathname === '/dashboard/consultation'} />
-                                <NavItem href="/dashboard/history" label="Medical Records" active={pathname === '/dashboard/history'} />
-                                <NavItem href="/dashboard/analytics" label="Analytics & Audits" active={pathname === '/dashboard/analytics'} />
-                            </>
+                        {(role === 'ADMIN' || role === 'DOCTOR') && (
+                            <NavItem href="/dashboard/consultation" label="Doctor Consultation" active={pathname === '/dashboard/consultation'} />
                         )}
 
-                        {role === 'LAB_TECH' && (
-                            <NavItem href="/dashboard/lab" label="Lab Requests" active={pathname === '/dashboard/lab'} />
-                        )}
-
-                        {role === 'PHARMACIST' && (
-                            <NavItem href="/dashboard/pharmacy" label="Patient Prescriptions" active={pathname === '/dashboard/pharmacy'} />
-                        )}
-
-                        {role === 'CASHIER' && (
-                            <NavItem href="/dashboard/billing" label="Invoices" active={pathname === '/dashboard/billing'} />
+                        {(role === 'ADMIN' || role === 'PHARMACIST') && (
+                            <NavItem href="/dashboard/pharmacy" label="Pharmacy Portal" active={pathname === '/dashboard/pharmacy'} />
                         )}
 
                         {role === 'ADMIN' && (
                             <>
-                                <NavItem href="/dashboard/analytics" label="Analytics & Audits" active={pathname === '/dashboard/analytics'} />
-                                <NavItem href="/dashboard/history" label="Medical Records" active={pathname === '/dashboard/history'} />
+                                <NavItem href="/dashboard/performance" label="Performance Board" active={pathname === '/dashboard/performance'} />
+                                <NavItem href="/dashboard/staff" label="Staff Management" active={pathname === '/dashboard/staff'} />
                             </>
                         )}
+
+                        <NavItem href="/dashboard/settings" label="Account Settings" active={pathname === '/dashboard/settings'} />
                     </nav>
 
                     <div className="mt-auto space-y-4">
-                        <div className="pt-6 border-t border-slate-100 flex items-center gap-3 px-2">
-                            <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold">
-                                {userName.charAt(0).toUpperCase()}
+                        <div className="bg-slate-50 p-4 rounded-xl border border-slate-100 flex items-center justify-between">
+                            <div>
+                                <p className="text-xs font-bold text-slate-500 uppercase tracking-widest">{role}</p>
+                                <p className="text-sm font-bold text-slate-900 mt-0.5">{userName}</p>
                             </div>
-                            <div className="flex flex-col overflow-hidden">
-                                <span className="text-sm font-semibold text-slate-900 truncate">{userName}</span>
-                                <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">{role}</span>
-                            </div>
+                            <Button
+                                variant="ghost"
+                                size="sm"
+                                className="text-red-600 hover:text-red-700 hover:bg-red-50 font-bold"
+                                onClick={() => {
+                                    localStorage.removeItem('token')
+                                    localStorage.removeItem('username')
+                                    localStorage.removeItem('roles')
+                                    window.location.href = '/login'
+                                }}
+                            >
+                                Logout
+                            </Button>
                         </div>
-                        <Button
-                            variant="ghost"
-                            size="sm"
-                            className="w-full text-red-500 hover:bg-red-50 hover:text-red-600 font-bold justify-start"
-                            onClick={logout}
-                        >
-                            Sign Out
-                        </Button>
                     </div>
                 </div>
             </aside>
@@ -102,8 +93,8 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
                 <div className="p-8">
                     {children}
                 </div>
-            </main>
-        </div>
+            </main >
+        </div >
     )
 }
 

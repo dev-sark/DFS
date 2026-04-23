@@ -1,0 +1,48 @@
+# Walkthrough: Divine Favour Hospital - Zero Paperwork System
+
+This document provides a guided tour of the newly implemented digital hospital workflow.
+
+## 🌟 The Vision
+Transforming clinical operations from manual, paper-based entries to a seamless, high-speed digital experience.
+
+---
+
+## 🏗️ Phase 1 & 2: The Medical Engine
+We successfully built the core backend infrastructure using Java Spring Boot and PostgreSQL.
+- **Robust Data Models**: Secure handling of Patients, Visits, Vitals, Lab Requests, and Invoices.
+- **Role-Based Security**: Spring Security with JWT ensures that only authorized staff access sensitive data.
+- **Flyway Database Control**: Migration scripts ensure the database schema stays consistent and portable.
+
+---
+
+## 🎨 Phase 3: The Premium Frontend
+A high-end, responsive Next.js application designed for clinical efficiency.
+![Login Page](/Users/sarkc/.gemini/antigravity/brain/b88885b0-cf48-46f2-afef-bda81f3a08ff/login_page_1771698231271.png)
+
+### Key Dashboards
+- **Receptionist**: Fast patient registration with insurance support.
+- **Nurse/Triage**: Real-time queue management and vitals capture.
+- **Doctor Consultation**: Comprehensive view of history, vitals, and one-click lab/pharmacy orders.
+- **Admin Analytics**: High-level oversight of hospital performance.
+![Analytics Dashboard](/Users/sarkc/.gemini/antigravity/brain/b88885b0-cf48-46f2-afef-bda81f3a08ff/analytics_page_1771698309465.png)
+
+---
+
+## 📡 Phase 4: Full-Stack Integration
+The system is now fully live and connected.
+- **Secure JWT Authentication**: The login page verifies credentials against the backend and manages sessions.
+- **Live Clinical Flow**: Data flows seamlessly from Reception -> Triage -> Doctor -> Labs.
+- **Dynamic Analytics**: Charts and stats are calculated on-the-fly from the real PostgreSQL database.
+
+### Smart Role-Based Access
+Redirection logic ensures staff only see what they need, enhancing speed and security.
+![Role-Based Sidebar](/Users/sarkc/.gemini/antigravity/brain/b88885b0-cf48-46f2-afef-bda81f3a08ff/verify_role_redirection_flow_1771699169573.webp)
+
+---
+
+## ✅ Final Verification
+- [x] Backend Build: `mvn clean compile` successful.
+- [x] Frontend Build: `npm run build` verified.
+- [x] End-to-End Flow: Login -> Registration -> Triage Queue -> Doctor View verified with mock and live data bridges.
+
+**The Divine Favour Hospital Management System is ready for localized deployment.**

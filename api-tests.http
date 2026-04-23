@@ -1,0 +1,54 @@
+### 1. LOGIN (Get JWT Token)
+# Use this block to log in and capture the token.
+# Other roles you can use: receptionist_john, nurse_mary, doctor_mike, lab_tech_sam, pharmacist_jane, cashier_lucy (password is 'password' for all)
+
+# @name login
+POST http://localhost:8080/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "password": "password"
+}
+
+### Set Token Variable (Automatic if using VS Code REST Client extension)
+@token = {{login.response.body.token}}
+
+### 2. RECEPTIONIST APIs
+# Get today's visits
+GET http://localhost:8080/api/receptionist/todays-visits
+Authorization: Bearer {{token}}
+
+### 3. NURSE APIs
+# Get Triange Queue
+GET http://localhost:8080/api/nurse/queue
+Authorization: Bearer {{token}}
+
+### 4. DOCTOR APIs
+# Get Consultation Queue
+GET http://localhost:8080/api/doctor/queue
+Authorization: Bearer {{token}}
+
+### 5. LAB APIs
+# Get Pending Lab Requests
+GET http://localhost:8080/api/lab/pending
+Authorization: Bearer {{token}}
+
+### 6. PHARMACY APIs
+# Get Pending Prescriptions
+GET http://localhost:8080/api/pharmacy/pending
+Authorization: Bearer {{token}}
+
+### 7. CASHIER APIs
+# Get All Invoices
+GET http://localhost:8080/api/cashier/invoices
+Authorization: Bearer {{token}}
+
+### 8. ADMIN / ANALYTICS APIs
+# Get Visit Volume Analytics
+GET http://localhost:8080/api/analytics/visit-volume
+Authorization: Bearer {{token}}
+
+### Get Medical Records History
+GET http://localhost:8080/api/history/records
+Authorization: Bearer {{token}}

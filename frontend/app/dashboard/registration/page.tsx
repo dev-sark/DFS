@@ -5,9 +5,20 @@ import { DashboardLayout } from "@/components/DashboardLayout"
 import { Button } from "@/components/ui/Button"
 import { Input } from "@/components/ui/Input"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/Card"
-import { receptionistApi } from "@/lib/api"
+import { patientsApi } from "@/lib/api"
+import { useAuth } from "@/providers/AuthContext"
+import { useRouter } from "next/navigation"
 
 export default function RegistrationPage() {
+    const { user } = useAuth()
+    const router = useRouter()
+
+    React.useEffect(() => {
+        if (user && user.role !== 'RECEPTIONIST' && user.role !== 'NURSE' && user.role !== 'ADMIN') {
+            router.push("/dashboard")
+        }
+    }, [user, router])
+
     const [isLoading, setIsLoading] = React.useState(false)
     const [message, setMessage] = React.useState({ type: '', text: '' })
     const [formData, setFormData] = React.useState({
@@ -34,7 +45,7 @@ export default function RegistrationPage() {
         setMessage({ type: '', text: '' })
 
         try {
-            const response = await receptionistApi.registerPatient(formData)
+            const response = await patientsApi.registerPatient(formData)
             setMessage({
                 type: 'success',
                 text: `Patient registered successfully! Folder Number: ${response.folderNumber}`

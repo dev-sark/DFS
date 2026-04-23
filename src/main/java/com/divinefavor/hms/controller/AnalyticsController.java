@@ -1,39 +1,66 @@
 package com.divinefavor.hms.controller;
 
-import java.util.List;
-import java.util.Map;
-
+import com.divinefavor.hms.repository.PatientRepository;
+import com.divinefavor.hms.repository.UserRepository;
+import com.divinefavor.hms.repository.VisitRepository;
+import com.divinefavor.hms.repository.MedicalRecordRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import com.divinefavor.hms.service.AnalyticsService;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.ArrayList;
 
 @RestController
 @RequestMapping("/api/analytics")
-@PreAuthorize("hasAnyRole('ADMIN', 'DOCTOR')")
+@CrossOrigin(origins = "*", maxAge = 3600)
 public class AnalyticsController {
 
     @Autowired
-    private AnalyticsService analyticsService;
+    private PatientRepository patientRepository;
 
-    @GetMapping("/visit-volume")
-    public ResponseEntity<List<Map<String, Object>>> getVisitVolume() {
-        return ResponseEntity.ok(analyticsService.getVisitVolume());
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private VisitRepository visitRepository;
+
+    @Autowired
+    private MedicalRecordRepository medicalRecordRepository;
+
+    @GetMapping("/summary")
+    public ResponseEntity<Map<String, Long>> getSummary() {
+        Map<String, Long> summary = new HashMap<>();
+        summary.put("totalPatients", patientRepository.count());
+        summary.put("totalStaff", userRepository.count());
+        summary.put("totalVisits", visitRepository.count());
+        return ResponseEntity.ok(summary);
     }
 
-    @GetMapping("/disease-prevalence")
-    public ResponseEntity<List<Map<String, Object>>> getDiseaseStats() {
-        return ResponseEntity.ok(analyticsService.getDiseaseStats());
-    }
+    @GetMapping("/staff-performance")
+    public ResponseEntity<List<Map<String, Object>>> getStaffPerformance() {
+        List<com.divinefavor.hms.model.User> staff = userRepository.findAll();
+        List<Map<String, Object>> performance = new ArrayList<>();
 
-    @GetMapping("/frequent-visitors")
-    public ResponseEntity<List<Map<String, Object>>> getFrequentVisitors(
-            @RequestParam(defaultValue = "1") Long threshold) {
-        return ResponseEntity.ok(analyticsService.getHighFrequencyPatients(threshold));
+        for (com.divinefavor.hms.model.User user : staff) {
+            Map<String, Object> staffData = new HashMap<>();
+            staffData.put("id", user.getId());
+            staffData.put("username", user.getUsername());
+            staffData.put("role", user.getRole());
+
+            long actions = 0;
+            if ("NURSE".equals(user.getRole())) {
+                actions = visitRepository.countByNurseId(user.getId());
+            } else if ("DOCTOR".equals(user.getRole())) {
+                actions = medicalRecordRepository.countByDoctorId(user.getId());
+            }
+
+            staffData.put("actionCount", actions);
+            performance.add(staffData);
+        }
+
+        return ResponseEntity.ok(performance);
     }
 }

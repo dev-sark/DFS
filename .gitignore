@@ -1,0 +1,28 @@
+.env
+.env.local
+.env.*.local
+
+# Java/Spring
+target/
+*.class
+*.jar
+*.war
+*.ear
+.mvn/
+.classpath
+.project
+.settings/
+bin/
+
+# Frontend (Next.js)
+frontend/node_modules/
+frontend/.next/
+frontend/out/
+frontend/build/
+
+# IDEs
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
